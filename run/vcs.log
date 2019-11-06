@@ -1,0 +1,56 @@
+
+Warning-[LINX_KRNL] Unsupported Linux kernel
+  Linux kernel '4.15.0-50-generic' is not supported.
+  Supported versions are 2.4* or 2.6*.
+
+Command: vcs -full64 -assert svaext -sverilog +error+500 +incdir+/home/baicai/__working/project/XFAN/xfan100/run/..//rtl/tb \
++libext+.v -f tb_flist -P /home/baicai/__working/SynopsysTools/verdi_install/share/PLI/VCS/LINUX64/novas.tab \
+/home/baicai/__working/SynopsysTools/verdi_install/share/PLI/VCS/LINUX64/pli.a -l \
+vcs.log
+                         Chronologic VCS (TM)
+         Version L-2016.06_Full64 -- Wed Nov  6 09:07:02 2019
+               Copyright (c) 1991-2016 by Synopsys Inc.
+                         ALL RIGHTS RESERVED
+
+This program is proprietary and confidential information of Synopsys Inc.
+and may be used and disclosed only as authorized in a license agreement
+controlling such use and disclosure.
+
+Parsing design file '/home/baicai/__working/project/XFAN/xfan100/run/../rtl/tb/tb_defines.v'
+Parsing design file '/home/baicai/__working/project/XFAN/xfan100/run/../rtl/tb/tb_mem_init.v'
+Parsing included file '/home/baicai/__working/project/XFAN/xfan100/run/..//rtl/tb/tb_defines.v'.
+Back to file '/home/baicai/__working/project/XFAN/xfan100/run/../rtl/tb/tb_mem_init.v'.
+Parsing design file '/home/baicai/__working/project/XFAN/xfan100/run/../rtl/tb/tb_top.v'
+Parsing included file '/home/baicai/__working/project/XFAN/xfan100/run/..//rtl/tb/tb_defines.v'.
+Back to file '/home/baicai/__working/project/XFAN/xfan100/run/../rtl/tb/tb_top.v'.
+Top Level Modules:
+       tb_top
+No TimeScale specified
+Starting vcs inline pass...
+3 unique modules to generate
+2 modules and 0 UDP read. 
+	However, due to incremental compilation, only 1 module needs to be compiled. 
+recompiling module tb_top
+All of 1 modules done
+make[1]: Entering directory '/home/baicai/__working/project/XFAN/xfan100/run/csrc' \
+
+rm -f _csrc*.so pre_vcsobj_*.so share_vcsobj_*.so
+ld -shared  -o .//../simv.daidir//_csrc0.so objs/amcQw_d.o 
+rm -f _csrc0.so
+if [ -x ../simv ]; then chmod -x ../simv; fi
+g++  -o ../simv   -Wl,-rpath-link=./ -Wl,-rpath='$ORIGIN'/simv.daidir/ -Wl,-rpath=./simv.daidir/ \
+-Wl,-rpath='$ORIGIN'/simv.daidir//scsim.db.dir  -L/usr/lib/x86_64-linux-gnu -L/lib/x86_64-linux-gnu \
+-Wl,--no-as-needed -rdynamic   amcQwB.o   _43990_archive_1.so _prev_archive_1.so \
+_csrc0.so  SIM_l.o  _csrc0.so     rmapats_mop.o rmapats.o rmar.o  rmar_llvm_0_1.o \
+rmar_llvm_0_0.o          /home/baicai/__working/SynopsysTools/vcs_install/linux64/lib/libzerosoft_rt_stubs.so \
+/home/baicai/__working/SynopsysTools/vcs_install/linux64/lib/libvirsim.so /home/baicai/__working/SynopsysTools/vcs_install/linux64/lib/liberrorinf.so \
+/home/baicai/__working/SynopsysTools/vcs_install/linux64/lib/libsnpsmalloc.so /home/baicai/__working/SynopsysTools/verdi_install/share/PLI/VCS/LINUX64/pli.a \
+/home/baicai/__working/SynopsysTools/vcs_install/linux64/lib/libvcsnew.so /home/baicai/__working/SynopsysTools/vcs_install/linux64/lib/libsimprofile.so \
+/home/baicai/__working/SynopsysTools/vcs_install/linux64/lib/libuclinative.so   -Wl,-whole-archive \
+/home/baicai/__working/SynopsysTools/vcs_install/linux64/lib/libvcsucli.so -Wl,-no-whole-archive \
+./../simv.daidir/vc_hdrs.o  _vcs_pli_stub_.o   /home/baicai/__working/SynopsysTools/vcs_install/linux64/lib/vcs_save_restore_new.o \
+-ldl -lm  -lc -lpthread -ldl 
+../simv up to date
+make[1]: Leaving directory '/home/baicai/__working/project/XFAN/xfan100/run/csrc' \
+
+CPU time: .228 seconds to compile + .172 seconds to elab + .285 seconds to link

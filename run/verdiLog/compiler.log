@@ -1,0 +1,16 @@
+*design* DebussyLib (btIdent Verdi3_I-2014.03)
+Command arguments:
+    +define+verilog
+    +libext+.v
+    +incdir+/home/baicai/__working/project/XFAN/xfan100/run/..//rtl/tb
+    -f tb_flist
+        /home/baicai/__working/project/XFAN/xfan100/run/..//rtl/tb/tb_defines.v
+        /home/baicai/__working/project/XFAN/xfan100/run/..//rtl/tb/tb_mem_init.v
+        /home/baicai/__working/project/XFAN/xfan100/run/..//rtl/tb/tb_top.v
+    -top
+    tb_top
+
+Highest level modules:
+tb_top
+
+Total	0 error(s),   0 warning(s)
