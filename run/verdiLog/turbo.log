@@ -1,3 +1,0 @@
-Command Line: /home/baicai/__working/SynopsysTools/verdi_install/platform/LINUXAMD64/bin/Novas +libext+.v +incdir+/home/baicai/__working/project/XFAN/xfan100/run/..//rtl/tb -f tb_flist -top tb_top -ssf tb_top.fsdb -nologo
-uname(Linux ubuntu 4.15.0-50-generic #54~16.04.1-Ubuntu SMP Wed May 8 15:55:19 UTC 2019 x86_64)
-au time 112.304052 4.328184 2.355582 delta 57843712 84832256 total 60662776 87651320
