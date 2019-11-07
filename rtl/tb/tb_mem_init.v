@@ -32,10 +32,10 @@ always @ (posedge sys_clk or negedge sys_rst_n) begin
   end
 end
 
-assign instr[7 : 0] = mem [addr];
-assign instr[15: 8] = mem [addr+1];
-assign instr[23:16] = mem [addr+2];
-assign instr[31:24] = mem [addr+3];
+assign `IFU.instr[7 : 0] = mem [addr];
+assign `IFU.instr[15: 8] = mem [addr+1];
+assign `IFU.instr[23:16] = mem [addr+2];
+assign `IFU.instr[31:24] = mem [addr+3];
 
 endmodule
 
