@@ -19,7 +19,7 @@ localparam [31:0] INST_MEM_DP = 32'd16384;
 
 reg [7:0] mem [0:INST_MEM_DP-1];
 initial begin
-  $readmemh("/home/baicai/__working/project/XFAN/xfan100/testcases/riscv-tests/isa/generated/rv32ui-p-addi.verilog",mem);
+  $readmemh("/home/baicai/__working/project/XFAN/xfan100/testcases/riscv-tests/isa/generated/rv32ui-p-add.verilog",mem);
 end
 
 
