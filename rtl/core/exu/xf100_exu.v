@@ -48,13 +48,88 @@ module xf100_exu
     .rst_n(rst_n)
   );
 
+  // step 2: regfile
+  wire                           rf_wbck_en  ;                           
+  wire [`XF100_XLEN-1:0]         rf_wbck_data;        
+  wire [`XF100_RFIDX_WIDTH-1:0]  rf_wbck_idx ;
+  xf100_exu_regfile u_xf100_exu_regfile 
+  (
+    // read port
+    .rf_i_read_en1    (dec_rs1_en ),
+    .rf_i_read_rsidx1 (dec_rs1_idx),
+    .rf_o_read_data1  (),
+
+    .rf_i_read_en2    (dec_rs2_en ),
+    .rf_i_read_rsidx2 (dec_rs2_idx),
+    .rf_o_read_data2  (),
+
+    //write port
+    .rf_i_wr_en       (rf_wbck_en  ),
+    .rf_i_wr_data     (rf_wbck_data),
+    .rf_i_wr_rdidx    (rf_wbck_idx ),
+
+
+    .clk  (clk  ),
+    .rst_n(rst_n)
+
+);
+
+
+
   // step 2: alu op pipeline.
-  
+  wire                           wbck_en;                           
+  wire [`XF100_XLEN-1:0]         wbck_data;        
+  wire [`XF100_RFIDX_WIDTH-1:0]  wbck_idx ;
+
+  xf100_exu_alu u_xf100_exu_alu
+  (
+
+    .alu_i_alu_op     (dec_alu_op      ),
+    .alu_i_alu_info   (dec_alu_info    ),
+	
+    .alu_i_rs1_en     (1'b0            ),
+    .alu_i_rs2_en     (1'b0            ),
+    .alu_i_rd_en      (dec_rd_en       ),
+    .alu_i_rs1        (`XF100_XLEN'h100),
+    .alu_i_rs2        (`XF100_XLEN'h200),
+    .alu_i_rdidx      (dec_rd_idx      ),
+
+
+    .alu_o_wbck_en    (wbck_en         ),
+    .alu_o_wbck_data  (wbck_data       ),
+    .alu_o_wbck_rdidx (wbck_idx        ),
+
+
+  // the decode is a combination logic and doesn't need clk and rst.
+  // here we just use it for placeholder.
+    .clk  (clk  ),
+    .rst_n(rst_n)
+
+  );
+
 
   // step 3. agu op pipeline.
 
   // step 4. wbck 
 
+  xf100_exu_wbck u_xf100_exu_wbck 
+  (
+
+    .wbck_i_wbck_en   (wbck_en     ),
+    .wbck_i_wbck_data (wbck_data   ),
+    .wbck_i_wbck_rdidx(wbck_idx    ),
+
+    .wbck_o_wbck_en   (rf_wbck_en  ),
+    .wbck_o_wbck_data (rf_wbck_data),
+    .wbck_o_wbck_rdidx(rf_wbck_idx ),
+
+
+  // the decode is a combination logic and doesn't need clk and rst.
+  // here we just use it for placeholder.
+    .clk  (clk  ),
+    .rst_n(rst_n)
+
+);
   // step 5. commit.
 
 
