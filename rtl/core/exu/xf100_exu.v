@@ -28,6 +28,7 @@ module xf100_exu
   wire  [`XF100_RFIDX_WIDTH-1:0]   dec_rs1_idx;
   wire  [`XF100_RFIDX_WIDTH-1:0]   dec_rs2_idx;
   wire  [`XF100_RFIDX_WIDTH-1:0]   dec_rd_idx ;
+  wire  [`XF100_XLEN-1:0       ]   dec_imm ;
 
 
   xf100_exu_decode u_xf100_exu_decode
@@ -43,6 +44,7 @@ module xf100_exu
 	.dec_o_rs1_idx (dec_rs1_idx),
 	.dec_o_rs2_idx (dec_rs2_idx),
 	.dec_o_rd_idx  (dec_rd_idx),
+	.dec_o_imm     (dec_imm   ),
 
     .clk  (clk  ),
     .rst_n(rst_n)
@@ -52,16 +54,19 @@ module xf100_exu
   wire                           rf_wbck_en  ;                           
   wire [`XF100_XLEN-1:0]         rf_wbck_data;        
   wire [`XF100_RFIDX_WIDTH-1:0]  rf_wbck_idx ;
+
+  wire [`XF100_XLEN-1:0]         rf_rs1;        
+  wire [`XF100_XLEN-1:0]         rf_rs2;        
   xf100_exu_regfile u_xf100_exu_regfile 
   (
     // read port
     .rf_i_read_en1    (dec_rs1_en ),
     .rf_i_read_rsidx1 (dec_rs1_idx),
-    .rf_o_read_data1  (),
+    .rf_o_read_data1  (rf_rs1),
 
     .rf_i_read_en2    (dec_rs2_en ),
     .rf_i_read_rsidx2 (dec_rs2_idx),
-    .rf_o_read_data2  (),
+    .rf_o_read_data2  (rf_rs2),
 
     //write port
     .rf_i_wr_en       (rf_wbck_en  ),
@@ -87,12 +92,13 @@ module xf100_exu
     .alu_i_alu_op     (dec_alu_op      ),
     .alu_i_alu_info   (dec_alu_info    ),
 	
-    .alu_i_rs1_en     (1'b0            ),
-    .alu_i_rs2_en     (1'b0            ),
+    .alu_i_rs1_en     (1'b0            ), // not uesed here. 
+    .alu_i_rs2_en     (1'b0            ), // not uesed here.
     .alu_i_rd_en      (dec_rd_en       ),
-    .alu_i_rs1        (`XF100_XLEN'h100),
-    .alu_i_rs2        (`XF100_XLEN'h200),
+    .alu_i_rs1        (rf_rs1          ),
+    .alu_i_rs2        (rf_rs2          ),
     .alu_i_rdidx      (dec_rd_idx      ),
+    .alu_i_imm        (dec_imm         ),
 
 
     .alu_o_wbck_en    (wbck_en         ),
