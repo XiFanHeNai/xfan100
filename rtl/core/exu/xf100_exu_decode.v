@@ -58,7 +58,6 @@ module xf100_exu_decode
   wire [4:0] rs1_idx = instr[19:15];
   wire [4:0] rs2_idx = instr[24:20];
    
-  wire [`XF100_XLEN-1:0] imm = {instr[31:12],12'h0};
   
   // extract funct7 form instr.
   wire [6:0] funct7 = instr[31:25];
@@ -79,6 +78,43 @@ module xf100_exu_decode
   wire sra_op  = (funct7_0100000 & funct3_101 & opcode_0110011);
   wire or_op   = (funct7_0000000 & funct3_110 & opcode_0110011);
   wire and_op  = (funct7_0000000 & funct3_111 & opcode_0110011);
+
+  wire addi_op  = (                 funct3_000 & opcode_0010011);
+  wire slti_op  = (                 funct3_010 & opcode_0010011);
+  wire sltiu_op = (                 funct3_011 & opcode_0010011);
+  wire xori_op  = (                 funct3_100 & opcode_0010011);
+  wire ori_op   = (                 funct3_110 & opcode_0010011);
+  wire andi_op  = (                 funct3_111 & opcode_0010011);
+  wire slli_op  = (funct7_0000000 & funct3_001 & opcode_0010011);
+  wire srli_op  = (funct7_0000000 & funct3_101 & opcode_0010011);
+  wire srai_op  = (funct7_0100000 & funct3_101 & opcode_0010011);
+
+
+  
+  wire alu_imm_20bit = lui_op;
+
+  wire alu_imm_12bit = 1'b0
+	                | addi_op  
+                    | slti_op  
+                    | sltiu_op 
+                    | xori_op  
+                    | ori_op   
+                    | andi_op  
+                    ;
+
+  wire alu_imm_5bit = 1'b0
+                       | slli_op
+                       | srli_op
+                       | srai_op
+                       ;
+
+  wire [`XF100_XLEN-1:0] alu_imm = `XF100_XLEN'h0
+	            | ({`XF100_XLEN{alu_imm_20bit}} & {instr[31:12], 12'h0})
+				// this is a signed imm, so extends it with signs.
+	            | ({`XF100_XLEN{alu_imm_12bit}} & {{20{instr[31]}}, instr[31:20]})
+	            | ({`XF100_XLEN{alu_imm_5bit }} & {27'h0, instr[24:20]})
+				;
+
 
   wire bxx_op = 1'b0; // TODO
    
@@ -124,6 +160,13 @@ module xf100_exu_decode
                    | and_op 
 				 )
 				 ;
+  wire imm_en = 1'b0
+              | alu_imm_20bit 
+              | alu_imm_12bit 
+              | alu_imm_5bit  
+              ;
+
+
 
   wire alu_op = 1'b0
                | lui_op
@@ -139,17 +182,18 @@ module xf100_exu_decode
                | and_op 
 			  ;
   wire [`ALU_INFO_WIDTH-1:0] alu_info;
-  assign alu_info[`ALU_INFO_DEF_ADD]  = add_op ;
-  assign alu_info[`ALU_INFO_DEF_SUB]  = sub_op ;
-  assign alu_info[`ALU_INFO_DEF_SLL]  = sll_op ;
-  assign alu_info[`ALU_INFO_DEF_SLT]  = slt_op ;
-  assign alu_info[`ALU_INFO_DEF_SLTU] = sltu_op;
-  assign alu_info[`ALU_INFO_DEF_XOR]  = xor_op ;
-  assign alu_info[`ALU_INFO_DEF_SRL]  = srl_op ;
-  assign alu_info[`ALU_INFO_DEF_SRA]  = sra_op ;
-  assign alu_info[`ALU_INFO_DEF_OR ]  = or_op  ;
-  assign alu_info[`ALU_INFO_DEF_AND]  = and_op ;
-  assign alu_info[`ALU_INFO_DEF_LUI]  = lui_op ;
+  assign alu_info[`ALU_INFO_DEF_HAS_IMM]  = imm_en ;
+  assign alu_info[`ALU_INFO_DEF_ADD]  = add_op  | addi_op ;
+  assign alu_info[`ALU_INFO_DEF_SUB]  = sub_op  | 1'b0    ;
+  assign alu_info[`ALU_INFO_DEF_SLL]  = sll_op  | slli_op ;
+  assign alu_info[`ALU_INFO_DEF_SLT]  = slt_op  | slti_op ;
+  assign alu_info[`ALU_INFO_DEF_SLTU] = sltu_op | sltiu_op;
+  assign alu_info[`ALU_INFO_DEF_XOR]  = xor_op  | xori_op ;
+  assign alu_info[`ALU_INFO_DEF_SRL]  = srl_op  | srli_op ;
+  assign alu_info[`ALU_INFO_DEF_SRA]  = sra_op  | srai_op ;
+  assign alu_info[`ALU_INFO_DEF_OR ]  = or_op   | ori_op  ;
+  assign alu_info[`ALU_INFO_DEF_AND]  = and_op  | andi_op ;
+  assign alu_info[`ALU_INFO_DEF_LUI]  = lui_op  | 1'b0    ;
 
 
   assign dec_o_alu_op = alu_op; 				 
@@ -162,7 +206,7 @@ module xf100_exu_decode
   assign dec_o_rs1_idx = rs1_idx;
   assign dec_o_rs2_idx = rs2_idx;
 
-  assign dec_o_imm  = imm;
+  assign dec_o_imm  = alu_imm;
 
 
 endmodule

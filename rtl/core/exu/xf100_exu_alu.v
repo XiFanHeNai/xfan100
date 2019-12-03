@@ -34,6 +34,7 @@ module xf100_exu_alu
 
 );
 
+  wire imm_en  = alu_i_alu_info[`ALU_INFO_DEF_HAS_IMM];
 
   wire add_op  = alu_i_alu_info[`ALU_INFO_DEF_ADD];
   wire sub_op  = alu_i_alu_info[`ALU_INFO_DEF_SUB];
@@ -57,8 +58,13 @@ module xf100_exu_alu
   wire addsub = add | sub;
   wire sign_flag = add_op | sub_op | slt_op ;
   wire [`XF100_XLEN-1:0]  imm = alu_i_imm;
-  wire [`XF100_XLEN:0]  misc_op1 = sign_flag ? {alu_i_rs1[`XF100_XLEN-1],alu_i_rs1} :{1'b0,alu_i_rs1} ;
-  wire [`XF100_XLEN:0]  misc_op2 = sign_flag ? {alu_i_rs2[`XF100_XLEN-1],alu_i_rs2} :{1'b0,alu_i_rs2} ;
+
+  wire [`XF100_XLEN-1:0]  alu_rs1 = alu_i_rs1[`XF100_XLEN-1:0] ;
+  wire [`XF100_XLEN-1:0]  alu_rs2 = imm_en ? alu_i_imm : alu_i_rs2 ;
+
+
+  wire [`XF100_XLEN:0]  misc_op1 = sign_flag ? {alu_rs1[`XF100_XLEN-1],alu_rs1} : {1'b0,alu_rs1} ;
+  wire [`XF100_XLEN:0]  misc_op2 = sign_flag ? {alu_rs2[`XF100_XLEN-1],alu_rs2} : {1'b0,alu_rs2} ;
 
   wire [`XF100_XLEN:0]  add_op1 = misc_op1;
   wire [`XF100_XLEN:0]  add_op2 = sub ? (~misc_op2) : misc_op2;
@@ -84,9 +90,9 @@ module xf100_exu_alu
 
   /////////////////////////////////////////////////////
   // logic alu
-  wire [`XF100_XLEN-1:0] and_res = alu_i_rs1 & alu_i_rs2;
-  wire [`XF100_XLEN-1:0] or_res  = alu_i_rs1 | alu_i_rs2;
-  wire [`XF100_XLEN-1:0] xor_res = alu_i_rs1 ^ alu_i_rs2;
+  wire [`XF100_XLEN-1:0] and_res = alu_rs1 & alu_rs2;
+  wire [`XF100_XLEN-1:0] or_res  = alu_rs1 | alu_rs2;
+  wire [`XF100_XLEN-1:0] xor_res = alu_rs1 ^ alu_rs2;
 
 
 
