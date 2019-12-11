@@ -10,9 +10,13 @@
 module xf100_exu_wbck 
 (
 
-  input                           wbck_i_wbck_en,
-  input [`XF100_XLEN-1:0]         wbck_i_wbck_data,
-  input [`XF100_RFIDX_WIDTH-1:0]  wbck_i_wbck_rdidx,
+  input                           wbck_i_wbck_en0,
+  input [`XF100_XLEN-1:0]         wbck_i_wbck_data0,
+  input [`XF100_RFIDX_WIDTH-1:0]  wbck_i_wbck_rdidx0,
+
+  input                           wbck_i_wbck_en1,
+  input [`XF100_XLEN-1:0]         wbck_i_wbck_data1,
+  input [`XF100_RFIDX_WIDTH-1:0]  wbck_i_wbck_rdidx1,
 
   output                          wbck_o_wbck_en,
   output [`XF100_XLEN-1:0]        wbck_o_wbck_data,
@@ -26,9 +30,12 @@ module xf100_exu_wbck
 
 );
 
-  assign wbck_o_wbck_en    = wbck_i_wbck_en    ;
-  assign wbck_o_wbck_data  = wbck_i_wbck_data ;
-  assign wbck_o_wbck_rdidx = wbck_i_wbck_rdidx ;
+  assign wbck_o_wbck_en    = wbck_i_wbck_en0    
+                           | wbck_i_wbck_en1   ;
+  assign wbck_o_wbck_data  = wbck_i_wbck_data0 
+                           | wbck_i_wbck_data1 ;
+  assign wbck_o_wbck_rdidx = wbck_i_wbck_rdidx0 
+                           | wbck_i_wbck_rdidx1;
 
 endmodule
 
